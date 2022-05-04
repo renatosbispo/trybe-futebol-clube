@@ -1,4 +1,4 @@
-import { Model, NUMBER, BOOLEAN } from 'sequelize';
+import { Model, INTEGER, BOOLEAN } from 'sequelize';
 import db from '.';
 import Team from './Team';
 
@@ -18,12 +18,44 @@ class Match extends Model {
 
 Match.init(
   {
-    id: NUMBER,
-    homeTeam: NUMBER,
-    homeTeamGoals: NUMBER,
-    awayTeam: NUMBER,
-    awayTeamGoals: NUMBER,
-    inProgress: BOOLEAN,
+    id: {
+      autoIncrement: true,
+      primaryKey: true,
+      type: INTEGER,
+    },
+    homeTeam: {
+      type: INTEGER,
+      references: {
+        model: 'teams',
+        key: 'id',
+      },
+      onDelete: 'RESTRICT',
+      field: 'home_team',
+    },
+    homeTeamGoals: {
+      allowNull: false,
+      type: INTEGER,
+      field: 'home_team_goals',
+    },
+    awayTeam: {
+      type: INTEGER,
+      references: {
+        model: 'teams',
+        key: 'id',
+      },
+      onDelete: 'RESTRICT',
+      field: 'away_team',
+    },
+    awayTeamGoals: {
+      allowNull: false,
+      type: INTEGER,
+      field: 'away_team_goals',
+    },
+    inProgress: {
+      allowNull: false,
+      type: BOOLEAN,
+      field: 'in_progress',
+    },
   },
   {
     underscored: true,
