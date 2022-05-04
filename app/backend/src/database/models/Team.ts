@@ -9,8 +9,16 @@ class Team extends Model {
 
 Team.init(
   {
-    id: INTEGER,
-    teamName: STRING,
+    id: {
+      autoIncrement: true,
+      primaryKey: true,
+      type: INTEGER,
+    },
+    teamName: {
+      allowNull: false,
+      type: STRING,
+      field: 'team_name',
+    },
   },
   {
     underscored: true,
