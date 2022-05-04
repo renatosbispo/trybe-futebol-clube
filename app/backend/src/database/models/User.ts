@@ -15,11 +15,29 @@ class User extends Model {
 
 User.init(
   {
-    id: INTEGER,
-    username: STRING,
-    role: STRING,
-    email: STRING,
-    password: STRING,
+    id: {
+      autoIncrement: true,
+      primaryKey: true,
+      type: INTEGER,
+    },
+    username: {
+      allowNull: false,
+      unique: true,
+      type: STRING,
+    },
+    role: {
+      allowNull: false,
+      type: STRING,
+    },
+    email: {
+      allowNull: false,
+      unique: true,
+      type: STRING,
+    },
+    password: {
+      allowNull: false,
+      type: STRING,
+    },
   },
   {
     underscored: true,
