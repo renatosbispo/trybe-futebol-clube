@@ -1,6 +1,6 @@
 import * as sinon from 'sinon';
-import * as chai from 'chai';
-import chaiHttp from 'chai-http';
+const chai = require('chai');
+const chaiHttp = require('chai-http');
 import { app } from '../app';
 import Example from '../database/models/Example';
 import { Response } from 'superagent';
