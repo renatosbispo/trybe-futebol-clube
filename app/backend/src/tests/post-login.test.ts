@@ -38,8 +38,10 @@ describe('POST /login', () => {
     });
 
     it('The response body should contain the user data', async () => {
+      const { password, ...existingUserWithoutPassword } = existingUser;
+
       expect(response.body.user).to.be.an('object');
-      expect(response.body.user).to.be.deep.equal(existingUser);
+      expect(response.body.user).to.be.deep.equal(existingUserWithoutPassword);
     });
   });
 });
