@@ -17,6 +17,7 @@
     "paths": {
       "*": ["node_modules/*"]
     },
+    "esModuleInterop": true
   },
   "include": ["src/**/*"],
   "exclude": ["src/tests"]

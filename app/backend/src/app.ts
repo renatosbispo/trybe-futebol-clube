@@ -1,9 +1,9 @@
-import * as express from 'express';
+import express, { Express, RequestHandler } from 'express';
 import { LoginController } from './controllers/login';
 import { LoginControllerInterface, LoginRouter } from './routers/login';
 
 class App {
-  public app: express.Express;
+  public app: Express;
 
   protected loginController: LoginControllerInterface;
 
@@ -19,7 +19,7 @@ class App {
   }
 
   protected config(): void {
-    const accessControl: express.RequestHandler = (_req, res, next) => {
+    const accessControl: RequestHandler = (_req, res, next) => {
       res.header('Access-Control-Allow-Origin', '*');
       res.header(
         'Access-Control-Allow-Methods',
