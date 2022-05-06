@@ -1,8 +1,9 @@
-import * as sinon from 'sinon';
-const chai = require('chai');
-const chaiHttp = require('chai-http');
-import { app } from '../app';
+import sinon from 'sinon';
+import chai from 'chai';
+import chaiHttp from 'chai-http';
 import { Response } from 'superagent';
+import { app } from '../app';
+import UserModel from '../database/models/UserModel';
 
 chai.use(chaiHttp);
 
@@ -11,30 +12,34 @@ const { expect } = chai;
 describe('POST /login', () => {
   let response: Response;
 
-  // before(async () => {
-  //   sinon
-  //     .stub(Example, "findOne")
-  //     .resolves({
-  //       ...<Seu mock>
-  //     } as Example);
-  // });
+  const existingUser = {
+    id: 2,
+    username: 'User',
+    role: 'user',
+    email: 'user@user.com',
+    password: '$2a$08$Y8Abi8jXvsXyqm.rmp0B.uQBA5qUz7T6Ghlg/CvVr/gLxYj5UAZVO',
+  };
 
-  // after(()=>{
-  //   (Example.findOne as sinon.SinonStub).restore();
-  // })
+  before(async () => {
+    sinon.stub(UserModel, 'findOne').resolves(existingUser as UserModel);
+  });
 
-  // it('...', async () => {
-  //   response = await chai
-  //      .request(app)
-  //      ...
+  after(() => {
+    (UserModel.findOne as sinon.SinonStub).restore();
+  });
 
-  //   expect(...)
-  // });
-  describe('If the request body is valid', () => {
-    it('The response status code should be 200', async () => {
+  describe('If the request body contains the correct email and password of an existing user', () => {
+    beforeEach(async () => {
       response = await chai.request(app).post('/login');
+    });
 
+    it('The response status code should be 200', async () => {
       expect(response.status).to.equal(200);
+    });
+
+    it('The response body should contain the user data', async () => {
+      expect(response.body.user).to.be.an('object');
+      expect(response.body.user).to.be.deep.equal(existingUser);
     });
   });
 });
