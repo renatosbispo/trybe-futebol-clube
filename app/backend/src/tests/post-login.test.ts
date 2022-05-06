@@ -31,10 +31,11 @@ describe('POST /login', () => {
 
   //   expect(...)
   // });
+  describe('If the request body is valid', () => {
+    it('The response status code should be 200', async () => {
+      response = await chai.request(app).post('/login');
 
-  it('The response status code should be 200', async () => {
-    response = await chai.request(app).post('/login');
-
-    expect(response.status).to.equal(200);
+      expect(response.status).to.equal(200);
+    });
   });
 });
