@@ -1,17 +1,17 @@
 import * as express from 'express';
-import { LoginController } from './controllers';
-import { LoginRoute } from './routes';
+import { LoginController } from './controllers/login';
+import { LoginControllerInterface, LoginRouter } from './routers/login';
 
 class App {
   public app: express.Express;
 
-  protected loginController: LoginController;
+  protected loginController: LoginControllerInterface;
 
-  protected loginRoute: LoginRoute;
+  protected loginRouter: LoginRouter;
 
   constructor() {
     this.loginController = new LoginController();
-    this.loginRoute = new LoginRoute(this.loginController);
+    this.loginRouter = new LoginRouter(this.loginController);
 
     this.app = express();
     this.config();
@@ -38,7 +38,7 @@ class App {
       res.status(200).json({ message: 'pong' });
     });
 
-    this.app.use('/login', this.loginRoute.router);
+    this.app.use('/login', this.loginRouter.router);
   }
 
   public start(PORT: string | number): void {

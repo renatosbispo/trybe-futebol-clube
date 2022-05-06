@@ -1,14 +1,14 @@
 import { Model, INTEGER, STRING } from 'sequelize';
 import db from '.';
-import Match from './Match';
+import MatchModel from './Match';
 
-class Team extends Model {
+class TeamModel extends Model {
   public id!: number;
 
   public teamName!: string;
 }
 
-Team.init(
+TeamModel.init(
   {
     id: {
       autoIncrement: true,
@@ -29,10 +29,10 @@ Team.init(
   },
 );
 
-Match.belongsTo(Team, { foreignKey: 'homeTeam', as: 'homeTeamInfo' });
-Match.belongsTo(Team, { foreignKey: 'awayTeam', as: 'awayTeamInfo' });
+MatchModel.belongsTo(TeamModel, { foreignKey: 'homeTeam', as: 'homeTeamInfo' });
+MatchModel.belongsTo(TeamModel, { foreignKey: 'awayTeam', as: 'awayTeamInfo' });
 
-Team.hasMany(Match, { foreignKey: 'homeTeam', as: 'homeMatches' });
-Team.hasMany(Match, { foreignKey: 'awayTeam', as: 'awayMatches' });
+TeamModel.hasMany(MatchModel, { foreignKey: 'homeTeam', as: 'homeMatches' });
+TeamModel.hasMany(MatchModel, { foreignKey: 'awayTeam', as: 'awayMatches' });
 
-export default Team;
+export default TeamModel;

@@ -2,11 +2,11 @@ import { Model } from 'sequelize';
 import db from '.';
 // import OtherModel from './OtherModel';
 
-class Example extends Model {
+class ExampleModel extends Model {
   // public <campo>!: <tipo>;
 }
 
-Example.init(
+ExampleModel.init(
   {
     // ... Campos
   },
@@ -24,10 +24,10 @@ Example.init(
  * Associations 1:N devem ficar em uma das instâncias de modelo
  * */
 
-// OtherModel.belongsTo(Example, { foreignKey: 'campoA', as: 'campoEstrangeiroA' });
-// OtherModel.belongsTo(Example, { foreignKey: 'campoB', as: 'campoEstrangeiroB' });
+// OtherModel.belongsTo(ExampleModel, { foreignKey: 'campoA', as: 'campoEstrangeiroA' });
+// OtherModel.belongsTo(ExampleModel, { foreignKey: 'campoB', as: 'campoEstrangeiroB' });
 
-// Example.hasMany(OtherModel, { foreignKey: 'campoC', as: 'campoEstrangeiroC' });
-// Example.hasMany(OtherModel, { foreignKey: 'campoD', as: 'campoEstrangeiroD' });
+// ExampleModel.hasMany(OtherModel, { foreignKey: 'campoC', as: 'campoEstrangeiroC' });
+// ExampleModel.hasMany(OtherModel, { foreignKey: 'campoD', as: 'campoEstrangeiroD' });
 
-export default Example;
+export default ExampleModel;
