@@ -1,9 +1,18 @@
 import * as express from 'express';
+import { LoginController } from './controllers';
+import { LoginRoute } from './routes';
 
 class App {
   public app: express.Express;
 
+  protected loginController: LoginController;
+
+  protected loginRoute: LoginRoute;
+
   constructor() {
+    this.loginController = new LoginController();
+    this.loginRoute = new LoginRoute(this.loginController);
+
     this.app = express();
     this.config();
     this.setupRoutes();
@@ -28,6 +37,8 @@ class App {
     this.app.get('/ping', (_req, res) => {
       res.status(200).json({ message: 'pong' });
     });
+
+    this.app.use('/login', this.loginRoute.router);
   }
 
   public start(PORT: string | number): void {
@@ -41,5 +52,4 @@ class App {
 
 export { App };
 
-// A execução dos testes de cobertura depende dessa exportação
 export const { app } = new App();
