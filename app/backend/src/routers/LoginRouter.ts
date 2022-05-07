@@ -1,12 +1,12 @@
 import { NextFunction, Request, Response, Router } from 'express';
-import LoginControllerInterface from './LoginController.interface';
+import { LoginController } from '../controllers';
 
 export default class LoginRouter {
-  protected loginController: LoginControllerInterface;
+  protected loginController: LoginController;
 
   public router: Router;
 
-  constructor(loginController: LoginControllerInterface) {
+  constructor(loginController: LoginController) {
     this.loginController = loginController;
 
     this.router = Router().post(

@@ -2,10 +2,9 @@ import { Request, Response, NextFunction } from 'express';
 import {
   AuthenticatedUserInterface,
   UserModelInterface,
-} from '../../interfaces/user';
-import { LoginControllerInterface } from '../../routers/login';
+} from '../interfaces/user';
 
-export default class LoginController implements LoginControllerInterface {
+export default class LoginController {
   public async login(
     _req: Request<
       unknown,

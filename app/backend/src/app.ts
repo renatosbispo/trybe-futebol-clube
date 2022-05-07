@@ -1,11 +1,11 @@
 import express, { Express, RequestHandler } from 'express';
-import { LoginController } from './controllers/login';
-import { LoginControllerInterface, LoginRouter } from './routers/login';
+import { LoginController } from './controllers';
+import { LoginRouter } from './routers';
 
 class App {
   public app: Express;
 
-  protected loginController: LoginControllerInterface;
+  protected loginController: LoginController;
 
   protected loginRouter: LoginRouter;
 
