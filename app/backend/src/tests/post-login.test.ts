@@ -37,7 +37,7 @@ describe('POST /login', () => {
       expect(response.status).to.equal(200);
     });
 
-    it('The response body should contain the user data', async () => {
+    it('The response body should be an object and contain the user data', async () => {
       const { password, ...existingUserWithoutPassword } = existingUser;
 
       expect(response.body.user).to.be.an('object');
