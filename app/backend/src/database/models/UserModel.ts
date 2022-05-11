@@ -1,16 +1,17 @@
 import { Model, INTEGER, STRING } from 'sequelize';
+import { UserRepo } from '../../interfaces/user';
 import db from '.';
 
-class UserModel extends Model {
-  public id!: number;
+class UserModel extends Model implements UserRepo {
+  declare id: number;
 
-  public username!: string;
+  declare username: string;
 
-  public role!: string;
+  declare role: string;
 
-  public email!: string;
+  declare email: string;
 
-  public password!: string;
+  declare password: string;
 }
 
 UserModel.init(
