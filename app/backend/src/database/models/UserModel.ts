@@ -1,8 +1,7 @@
 import { Model, INTEGER, STRING } from 'sequelize';
-import { UserRepo } from '../../interfaces/user';
 import db from '.';
 
-class UserModel extends Model implements UserRepo {
+class UserModel extends Model {
   declare id: number;
 
   declare username: string;
