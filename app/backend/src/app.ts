@@ -1,16 +1,34 @@
 import express, { Express, RequestHandler } from 'express';
+import SequelizeAdapter from './adapters/SequelizeAdapter';
 import { LoginController } from './controllers';
+import { UserRepo } from './interfaces/user';
 import { LoginRouter } from './routers';
+import { AuthService, UserService } from './services';
 
 class App {
   public app: Express;
+
+  protected userRepo: UserRepo;
+
+  protected authService: AuthService;
+
+  protected userService: UserService;
 
   protected loginController: LoginController;
 
   protected loginRouter: LoginRouter;
 
   constructor() {
-    this.loginController = new LoginController();
+    this.userRepo = new SequelizeAdapter();
+
+    this.authService = new AuthService(this.userRepo);
+    this.userService = new UserService(this.userRepo);
+
+    this.loginController = new LoginController(
+      this.authService,
+      this.userService,
+    );
+
     this.loginRouter = new LoginRouter(this.loginController);
 
     this.app = express();
