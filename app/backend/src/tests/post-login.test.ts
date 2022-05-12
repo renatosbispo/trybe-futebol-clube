@@ -30,7 +30,10 @@ describe('POST /login', () => {
 
   describe('If the request body contains the correct email and password of an existing user', () => {
     beforeEach(async () => {
-      response = await chai.request(app).post('/login');
+      response = await chai
+        .request(app)
+        .post('/login')
+        .send({ email: existingUser.email, password: existingUser.password });
     });
 
     it('The response status code should be 200', async () => {
