@@ -1,6 +1,8 @@
-import sinon from 'sinon';
 import chai from 'chai';
 import chaiHttp from 'chai-http';
+import fs from 'fs';
+import jwt from 'jsonwebtoken';
+import sinon from 'sinon';
 import { Response } from 'superagent';
 import { app } from '../app';
 import UserModel from '../database/models/UserModel';
@@ -40,11 +42,18 @@ describe('POST /login', () => {
       expect(response.status).to.equal(200);
     });
 
-    it('The response body should be an object and contain the user data', async () => {
-      const { password, ...existingUserWithoutPassword } = existingUser;
+    it('The response body should be an object', async () => {
+      expect(response.body).to.be.an('object');
+    });
 
-      expect(response.body.user).to.be.an('object');
+    it('The response body should contain the user data and a valid JWT token', async () => {
+      const { password, ...existingUserWithoutPassword } = existingUser;
+      const token = response.body.token;
+      const secret = fs.readFileSync('jwt.evaluation.key', { encoding: 'utf-8' });
+
       expect(response.body.user).to.be.deep.equal(existingUserWithoutPassword);
+      expect(token).to.be.a('string');
+      expect(() => jwt.verify(token, secret)).to.not.throw();
     });
   });
 });
