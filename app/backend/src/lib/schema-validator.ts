@@ -5,7 +5,7 @@ export default class SchemaValidator {
   protected static getErrorCode(errorType: string): ErrorCode {
     const errorTypeEnding = errorType.split('.')[1];
 
-    const errorCode = errorTypeEnding === 'required'
+    const errorCode = errorTypeEnding === 'required' || errorTypeEnding === 'empty'
       ? ErrorCode.ENTITY_PROPERTY_MISSING
       : ErrorCode.ENTITY_PROPERTY_INVALID;
 

@@ -8,7 +8,7 @@ export default class ErrorMiddleware {
     const httpResponseStatusCodes = {
       [ErrorCode.ENTITY_ALREADY_EXISTS]: 409,
       [ErrorCode.ENTITY_NOT_FOUND]: 404,
-      [ErrorCode.ENTITY_PROPERTY_INVALID]: 422,
+      [ErrorCode.ENTITY_PROPERTY_INVALID]: 401,
       [ErrorCode.ENTITY_PROPERTY_MISSING]: 400,
       [ErrorCode.ENTITY_PROPERTY_UNEXPECTED]: 422,
       [ErrorCode.INVALID_QUERY]: 422,
