@@ -1,3 +1,4 @@
+import BypassLint from './BypassLint.type';
 import UserCredentialsType from './UserCredentials.type';
 
-export { UserCredentialsType };
+export { BypassLint, UserCredentialsType };
