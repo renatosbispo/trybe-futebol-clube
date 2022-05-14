@@ -5,7 +5,7 @@ import {
 import { UserCredentialsType } from '../types/user';
 import { AuthService } from '../services';
 
-export default class LoginMiddleware {
+export default class AuthMiddleware {
   protected authService: AuthService;
 
   constructor(authService: AuthService) {

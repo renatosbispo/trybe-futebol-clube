@@ -3,7 +3,7 @@ import fs from 'fs';
 import UserModelSequelizeAdapter from './adapters/UserModelSequelizeAdapter';
 import { LoginController } from './controllers';
 import { UserRepo } from './interfaces/user';
-import { ErrorMiddleware, LoginMiddleware } from './middlewares';
+import { ErrorMiddleware, AuthMiddleware } from './middlewares';
 import { LoginRouter } from './routers';
 import { AuthService, UserService } from './services';
 
@@ -16,7 +16,7 @@ class App {
 
   protected loginController: LoginController;
 
-  protected loginMiddleware: LoginMiddleware;
+  protected authMiddleware: AuthMiddleware;
 
   protected loginRouter: LoginRouter;
 
@@ -36,8 +36,8 @@ class App {
       this.userService,
     );
 
-    this.loginMiddleware = new LoginMiddleware(this.authService);
-    this.loginRouter = new LoginRouter(this.loginController, this.loginMiddleware);
+    this.authMiddleware = new AuthMiddleware(this.authService);
+    this.loginRouter = new LoginRouter(this.loginController, this.authMiddleware);
 
     this.app = express();
     this.config();
