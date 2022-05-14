@@ -30,9 +30,28 @@ export default class LoginController {
 
       const user = await this.userService.findByEmail(email) as UserModelInterface;
       const { password, ...userWithoutPassword } = user;
-      const token = this.authService.generateToken({ id: user.id, email });
+      const token = this.authService.generateToken({ id: user.id, email, role: user.role });
 
       res.status(200).json({ user: userWithoutPassword, token });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  public async validate(
+    req: Request<
+    unknown,
+    string
+    >,
+    res: Response<string>,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const tokenFromReq = req.headers.authorization;
+
+      const token = this.authService.verifyToken(tokenFromReq);
+
+      res.status(200).json(token.role);
     } catch (error) {
       next(error);
     }
