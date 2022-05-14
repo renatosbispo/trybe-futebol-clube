@@ -101,13 +101,10 @@ describe('POST /login', () => {
     });
 
     beforeEach(async () => {
-      response = await chai
-        .request(app)
-        .post('/login')
-        .send({
-          email: user.email,
-          password: user.password,
-        });
+      response = await chai.request(app).post('/login').send({
+        email: user.email,
+        password: user.password,
+      });
     });
 
     it('The response status code should be 401', async () => {
@@ -120,6 +117,41 @@ describe('POST /login', () => {
 
     it('The response body should contain the message "Incorrect email or password"', async () => {
       expect(response.body.message).to.be.equal('Incorrect email or password');
+    });
+  });
+
+  describe('If the request body is missing the email or the password', () => {
+    before(async () => {
+      sinon.stub(UserModel, 'findOne').resolves(null);
+    });
+
+    after(() => {
+      (UserModel.findOne as sinon.SinonStub).restore();
+    });
+
+    let responseWithoutEmail;
+    let responseWithouPassword;
+
+    beforeEach(async () => {
+      responseWithoutEmail = await chai.request(app).post('/login').send({
+        password: user.password,
+      });
+
+      responseWithouPassword = await chai.request(app).post('/login').send({
+        email: user.email,
+      });
+    });
+
+    it('The response status code should be 400', async () => {
+      expect(response.status).to.equal(400);
+    });
+
+    it('The response body should be an object', async () => {
+      expect(response.body).to.be.an('object');
+    });
+
+    it('The response body should contain the message "All fields must be filled"', async () => {
+      expect(response.body.message).to.be.equal('All fields must be filled');
     });
   });
 });
