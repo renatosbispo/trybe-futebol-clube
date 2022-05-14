@@ -1,4 +1,5 @@
 import jwt, { SignOptions } from 'jsonwebtoken';
+import CryptoService from './CryptoService';
 import { UserModelInterface, UserRepo } from '../interfaces/user';
 import TokenPayloadInterface from '../interfaces/auth/TokenPayload.interface';
 import ErrorWithCode from '../lib/error-with-code';
@@ -30,7 +31,7 @@ export default class AuthService {
   ): Promise<void> {
     const user = await this.userRepo.findOne({ email });
 
-    if (!user || user.password !== password) {
+    if (!user || !(await CryptoService.compare(password, user.password))) {
       throw new ErrorWithCode(
         'UNAUTHORIZED_OPERATION',
         'Incorrect email or password',
