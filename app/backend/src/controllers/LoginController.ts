@@ -23,7 +23,7 @@ export default class LoginController {
     UserCredentialsType
     >,
     res: Response<AuthenticatedUserInterface>,
-    _next: NextFunction,
+    next: NextFunction,
   ): Promise<void> {
     try {
       const { email } = req.body;
@@ -34,7 +34,7 @@ export default class LoginController {
 
       res.status(200).json({ user: userWithoutPassword, token });
     } catch (error) {
-      console.error(error);
+      next(error);
     }
   }
 }

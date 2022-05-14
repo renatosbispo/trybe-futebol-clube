@@ -3,7 +3,7 @@ import fs from 'fs';
 import SequelizeAdapter from './adapters/SequelizeAdapter';
 import { LoginController } from './controllers';
 import { UserRepo } from './interfaces/user';
-import { LoginMiddleware } from './middlewares';
+import { ErrorMiddleware, LoginMiddleware } from './middlewares';
 import { LoginRouter } from './routers';
 import { AuthService, UserService } from './services';
 
@@ -42,6 +42,7 @@ class App {
     this.app = express();
     this.config();
     this.setupRoutes();
+    this.app.use(ErrorMiddleware.handleError);
   }
 
   protected config(): void {

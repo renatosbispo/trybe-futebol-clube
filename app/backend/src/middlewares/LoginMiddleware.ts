@@ -28,7 +28,7 @@ export default class LoginMiddleware {
 
       next();
     } catch (error) {
-      console.error(error);
+      next(error);
     }
   }
 }

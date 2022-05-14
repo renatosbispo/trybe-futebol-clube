@@ -1,6 +1,7 @@
 import jwt, { SignOptions } from 'jsonwebtoken';
 import { UserModelInterface, UserRepo } from '../interfaces/user';
 import TokenPayloadInterface from '../interfaces/auth/TokenPayload.interface';
+import ErrorWithCode from '../lib/error-with-code';
 
 export default class AuthService {
   protected jwtSecret: string;
@@ -19,7 +20,10 @@ export default class AuthService {
     const user = await this.userRepo.findOne({ email });
 
     if (!user || user.password !== password) {
-      throw new Error('Incorrect email or password');
+      throw new ErrorWithCode(
+        'UNAUTHORIZED_OPERATION',
+        'Incorrect email or password',
+      );
     }
   }
 
