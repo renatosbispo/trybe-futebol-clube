@@ -17,11 +17,13 @@ export default class LoginRouter {
     this.authMiddleware = authMiddleware;
     this.loginController = loginController;
 
-    this.router = this.setupRouter();
+    this.router = Router();
+    this.router = this.setupPostRoot();
+    this.router = this.setupGetValidate();
   }
 
-  protected setupRouter(): Router {
-    return Router().post(
+  protected setupPostRoot(): Router {
+    return this.router.post(
       '/',
       async (req: Request, res: Response, next: NextFunction) => {
         new RequestValidationMiddleware(
@@ -34,6 +36,15 @@ export default class LoginRouter {
       },
       async (req: Request, res: Response, next: NextFunction) => {
         this.loginController.login(req, res, next);
+      },
+    );
+  }
+
+  protected setupGetValidate(): Router {
+    return this.router.get(
+      '/validate',
+      async (req: Request, res: Response, next: NextFunction) => {
+        this.loginController.validate(req, res, next);
       },
     );
   }
