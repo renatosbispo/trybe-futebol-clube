@@ -49,11 +49,37 @@ describe('POST /login', () => {
     it('The response body should contain the user data and a valid JWT token', async () => {
       const { password, ...existingUserWithoutPassword } = existingUser;
       const token = response.body.token;
-      const secret = fs.readFileSync('jwt.evaluation.key', { encoding: 'utf-8' });
+      const secret = fs.readFileSync('jwt.evaluation.key', {
+        encoding: 'utf-8',
+      });
 
       expect(response.body.user).to.be.deep.equal(existingUserWithoutPassword);
       expect(token).to.be.a('string');
       expect(() => jwt.verify(token, secret)).to.not.throw();
+    });
+  });
+
+  describe('If the request body contains the incorrect password of an existing user', () => {
+    beforeEach(async () => {
+      response = await chai
+        .request(app)
+        .post('/login')
+        .send({
+          email: existingUser.email,
+          password: `wrong${existingUser.password}`,
+        });
+    });
+
+    it('The response status code should be 401', async () => {
+      expect(response.status).to.equal(401);
+    });
+
+    it('The response body should be an object', async () => {
+      expect(response.body).to.be.an('object');
+    });
+
+    it('The response body should contain the message "Incorrect email or password"', async () => {
+      expect(response.body.message).to.be.equal('Incorrect email or password');
     });
   });
 });
