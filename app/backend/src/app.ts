@@ -3,20 +3,20 @@ import fs from 'fs';
 import UserModelSequelizeAdapter from './adapters/UserModelSequelizeAdapter';
 import { LoginController } from './controllers';
 import { UserRepo } from './interfaces/user';
-import { ErrorMiddleware, AuthMiddleware } from './middlewares';
+import { AuthMiddleware, ErrorMiddleware } from './middlewares';
 import { LoginRouter } from './routers';
 import { AuthService, UserService } from './services';
 
 class App {
   public app: Express;
 
+  protected authMiddleware: AuthMiddleware;
+
   protected authService: AuthService;
 
   protected jwtSecret: string;
 
   protected loginController: LoginController;
-
-  protected authMiddleware: AuthMiddleware;
 
   protected loginRouter: LoginRouter;
 
@@ -37,7 +37,7 @@ class App {
     );
 
     this.authMiddleware = new AuthMiddleware(this.authService);
-    this.loginRouter = new LoginRouter(this.loginController, this.authMiddleware);
+    this.loginRouter = new LoginRouter(this.authMiddleware, this.loginController);
 
     this.app = express();
     this.config();
