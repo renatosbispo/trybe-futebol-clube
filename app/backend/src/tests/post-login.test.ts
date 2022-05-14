@@ -129,21 +129,22 @@ describe('POST /login', () => {
       (UserModel.findOne as sinon.SinonStub).restore();
     });
 
-    let responseWithoutEmail;
-    let responseWithouPassword;
+    let responseWithoutEmail: Response;
+    let responseWithoutPassword: Response;
 
     beforeEach(async () => {
       responseWithoutEmail = await chai.request(app).post('/login').send({
         password: user.password,
       });
 
-      responseWithouPassword = await chai.request(app).post('/login').send({
+      responseWithoutPassword = await chai.request(app).post('/login').send({
         email: user.email,
       });
     });
 
     it('The response status code should be 400', async () => {
-      expect(response.status).to.equal(400);
+      expect(responseWithoutEmail.status).to.equal(400);
+      expect(responseWithoutPassword.status).to.equal(400);
     });
 
     it('The response body should be an object', async () => {
@@ -151,7 +152,9 @@ describe('POST /login', () => {
     });
 
     it('The response body should contain the message "All fields must be filled"', async () => {
-      expect(response.body.message).to.be.equal('All fields must be filled');
+      expect(responseWithoutEmail.body.message).to.equal('All fields must be filled');
+      expect(responseWithoutPassword.body.message).to.equal('All fields must be filled');
+
     });
   });
 });
