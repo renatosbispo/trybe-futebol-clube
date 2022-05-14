@@ -3,6 +3,7 @@ import {
   AuthenticatedUserInterface,
   UserModelInterface,
 } from '../interfaces/user';
+import { UserCredentialsType } from '../types/user';
 import { AuthService, UserService } from '../services';
 
 export default class LoginController {
@@ -19,20 +20,19 @@ export default class LoginController {
     req: Request<
     unknown,
     AuthenticatedUserInterface,
-    Pick<UserModelInterface, 'email' | 'password'>
+    UserCredentialsType
     >,
     res: Response<AuthenticatedUserInterface>,
     _next: NextFunction,
   ): Promise<void> {
     try {
-      const { email, password: passwordFromReq } = req.body;
-
-      await this.authService.verifyCredentials(email, passwordFromReq);
+      const { email } = req.body;
 
       const user = await this.userService.findByEmail(email) as UserModelInterface;
       const { password, ...userWithoutPassword } = user;
+      const token = this.authService.generateToken({ id: user.id, email });
 
-      res.status(200).json({ user: userWithoutPassword, token: 'token' });
+      res.status(200).json({ user: userWithoutPassword, token });
     } catch (error) {
       console.error(error);
     }
