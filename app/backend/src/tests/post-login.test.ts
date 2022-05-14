@@ -22,6 +22,11 @@ describe('POST /login', () => {
     password: '$2a$08$Y8Abi8jXvsXyqm.rmp0B.uQBA5qUz7T6Ghlg/CvVr/gLxYj5UAZVO',
   };
 
+  const userCredentials = {
+    email: 'user@user.com',
+    password: 'secret_user',
+  };
+
   describe('If the request body contains the correct email and password of an existing user', () => {
     before(async () => {
       sinon.stub(UserModel, 'findOne').resolves(user as UserModel);
@@ -32,10 +37,7 @@ describe('POST /login', () => {
     });
 
     beforeEach(async () => {
-      response = await chai
-        .request(app)
-        .post('/login')
-        .send({ email: user.email, password: user.password });
+      response = await chai.request(app).post('/login').send(userCredentials);
     });
 
     it('The response status code should be 200', async () => {
@@ -73,8 +75,8 @@ describe('POST /login', () => {
         .request(app)
         .post('/login')
         .send({
-          email: user.email,
-          password: `wrong${user.password}`,
+          email: userCredentials.email,
+          password: `wrong${userCredentials.password}`,
         });
     });
 
@@ -101,10 +103,10 @@ describe('POST /login', () => {
     });
 
     beforeEach(async () => {
-      response = await chai.request(app).post('/login').send({
-        email: user.email,
-        password: user.password,
-      });
+      response = await chai
+        .request(app)
+        .post('/login')
+        .send(userCredentials);
     });
 
     it('The response status code should be 401', async () => {
@@ -122,7 +124,7 @@ describe('POST /login', () => {
 
   describe('If the request body is missing the email or the password', () => {
     before(async () => {
-      sinon.stub(UserModel, 'findOne').resolves(null);
+      sinon.stub(UserModel, 'findOne').resolves(user as UserModel);
     });
 
     after(() => {
@@ -134,11 +136,11 @@ describe('POST /login', () => {
 
     beforeEach(async () => {
       responseWithoutEmail = await chai.request(app).post('/login').send({
-        password: user.password,
+        password: userCredentials.password,
       });
 
       responseWithoutPassword = await chai.request(app).post('/login').send({
-        email: user.email,
+        email: userCredentials.email,
       });
     });
 
@@ -152,9 +154,12 @@ describe('POST /login', () => {
     });
 
     it('The response body should contain the message "All fields must be filled"', async () => {
-      expect(responseWithoutEmail.body.message).to.equal('All fields must be filled');
-      expect(responseWithoutPassword.body.message).to.equal('All fields must be filled');
-
+      expect(responseWithoutEmail.body.message).to.equal(
+        'All fields must be filled'
+      );
+      expect(responseWithoutPassword.body.message).to.equal(
+        'All fields must be filled'
+      );
     });
   });
 });

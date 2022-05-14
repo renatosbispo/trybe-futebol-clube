@@ -20,6 +20,11 @@ describe('GET /login/validate', () => {
     password: '$2a$08$Y8Abi8jXvsXyqm.rmp0B.uQBA5qUz7T6Ghlg/CvVr/gLxYj5UAZVO',
   };
 
+  const userCredentials = {
+    email: 'user@user.com',
+    password: 'secret_user',
+  }
+
   describe('If the request header contains a valid token', () => {
     let validToken: string;
 
@@ -29,7 +34,7 @@ describe('GET /login/validate', () => {
       response = await chai
       .request(app)
       .post('/login')
-        .send({ email: user.email, password: user.password });
+        .send(userCredentials);
 
       validToken = response.body.token;
     });
