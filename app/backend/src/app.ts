@@ -1,6 +1,6 @@
 import express, { Express, RequestHandler } from 'express';
 import fs from 'fs';
-import SequelizeAdapter from './adapters/SequelizeAdapter';
+import UserModelSequelizeAdapter from './adapters/UserModelSequelizeAdapter';
 import { LoginController } from './controllers';
 import { UserRepo } from './interfaces/user';
 import { ErrorMiddleware, LoginMiddleware } from './middlewares';
@@ -26,7 +26,7 @@ class App {
 
   constructor() {
     this.jwtSecret = fs.readFileSync('jwt.evaluation.key', { encoding: 'utf-8' });
-    this.userRepo = new SequelizeAdapter();
+    this.userRepo = new UserModelSequelizeAdapter();
 
     this.authService = new AuthService(this.userRepo, this.jwtSecret);
     this.userService = new UserService(this.userRepo);
