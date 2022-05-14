@@ -1,23 +1,34 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import { LoginController } from '../controllers';
-import { AuthMiddleware } from '../middlewares';
+import { AuthMiddleware, RequestValidationMiddleware } from '../middlewares';
+import { UserSchema } from '../schemas';
 
 export default class LoginRouter {
-  protected loginController: LoginController;
-
   protected authMiddleware: AuthMiddleware;
+
+  protected loginController: LoginController;
 
   public router: Router;
 
   constructor(
-    loginController: LoginController,
     authMiddleware: AuthMiddleware,
+    loginController: LoginController,
   ) {
-    this.loginController = loginController;
     this.authMiddleware = authMiddleware;
+    this.loginController = loginController;
 
-    this.router = Router().post(
+    this.router = this.setupRouter();
+  }
+
+  protected setupRouter(): Router {
+    return Router().post(
       '/',
+      async (req: Request, res: Response, next: NextFunction) => {
+        new RequestValidationMiddleware(
+          [UserSchema.email, UserSchema.password],
+          [req.body.email, req.body.password],
+        ).validate(req, res, next);
+      },
       async (req: Request, res: Response, next: NextFunction) => {
         this.authMiddleware.verifyCredentials(req, res, next);
       },
