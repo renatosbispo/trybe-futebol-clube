@@ -1,27 +1,34 @@
 import express, { Express, RequestHandler } from 'express';
+import fs from 'fs';
 import SequelizeAdapter from './adapters/SequelizeAdapter';
 import { LoginController } from './controllers';
 import { UserRepo } from './interfaces/user';
+import { LoginMiddleware } from './middlewares';
 import { LoginRouter } from './routers';
 import { AuthService, UserService } from './services';
 
 class App {
   public app: Express;
 
-  protected userRepo: UserRepo;
-
   protected authService: AuthService;
 
-  protected userService: UserService;
+  protected jwtSecret: string;
 
   protected loginController: LoginController;
 
+  protected loginMiddleware: LoginMiddleware;
+
   protected loginRouter: LoginRouter;
 
+  protected userService: UserService;
+
+  protected userRepo: UserRepo;
+
   constructor() {
+    this.jwtSecret = fs.readFileSync('jwt.evaluation.key', { encoding: 'utf-8' });
     this.userRepo = new SequelizeAdapter();
 
-    this.authService = new AuthService(this.userRepo);
+    this.authService = new AuthService(this.userRepo, this.jwtSecret);
     this.userService = new UserService(this.userRepo);
 
     this.loginController = new LoginController(
@@ -29,7 +36,8 @@ class App {
       this.userService,
     );
 
-    this.loginRouter = new LoginRouter(this.loginController);
+    this.loginMiddleware = new LoginMiddleware(this.authService);
+    this.loginRouter = new LoginRouter(this.loginController, this.loginMiddleware);
 
     this.app = express();
     this.config();
