@@ -13,6 +13,17 @@ export default class AuthService {
     this.userRepo = userRepo;
   }
 
+  public generateToken(payload: TokenPayloadInterface): string {
+    const jwtConfig: SignOptions = {
+      algorithm: 'HS256',
+      expiresIn: '12h',
+    };
+
+    const token = jwt.sign(payload, this.jwtSecret, jwtConfig);
+
+    return token;
+  }
+
   public async verifyCredentials(
     email: UserModelInterface['email'],
     password: UserModelInterface['password'],
@@ -27,14 +38,27 @@ export default class AuthService {
     }
   }
 
-  public generateToken(payload: TokenPayloadInterface): string {
-    const jwtConfig: SignOptions = {
-      algorithm: 'HS256',
-      expiresIn: '12h',
-    };
+  public verifyToken(token: string | undefined): TokenPayloadInterface {
+    if (!token) {
+      throw new ErrorWithCode('TOKEN_NOT_FOUND', 'Token not found');
+    }
 
-    const token = jwt.sign(payload, this.jwtSecret, jwtConfig);
+    try {
+      const payload = jwt.verify(token, this.jwtSecret);
 
-    return token;
+      return payload as TokenPayloadInterface;
+    } catch (error) {
+      if (error instanceof Error && error.name === 'TokenExpiredError') {
+        throw new ErrorWithCode(
+          'TOKEN_EXPIRED_OR_INVALID',
+          'Expired token',
+        );
+      }
+
+      throw new ErrorWithCode(
+        'TOKEN_EXPIRED_OR_INVALID',
+        'Invalid token',
+      );
+    }
   }
 }
