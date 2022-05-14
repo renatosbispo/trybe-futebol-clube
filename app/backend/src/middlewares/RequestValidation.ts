@@ -3,13 +3,13 @@ import { Schema } from 'joi';
 import SchemaValidator from '../lib/schema-validator';
 
 export default class RequestValidationMiddleware {
-  protected schema: Schema;
+  protected schemas: Schema[];
 
-  protected validationTarget: unknown;
+  protected validationTargets: unknown[];
 
-  constructor(schema: Schema, validationTarget: unknown) {
-    this.schema = schema;
-    this.validationTarget = validationTarget;
+  constructor(schemas: Schema[], validationTargets: unknown[]) {
+    this.schemas = schemas;
+    this.validationTargets = validationTargets;
   }
 
   public async validate(
@@ -18,7 +18,9 @@ export default class RequestValidationMiddleware {
     next: NextFunction,
   ): Promise<void> {
     try {
-      SchemaValidator.validate(this.schema, this.validationTarget);
+      this.schemas.forEach(
+        (schema, index) => SchemaValidator.validate(schema, this.validationTargets[index]),
+      );
 
       next();
     } catch (error) {

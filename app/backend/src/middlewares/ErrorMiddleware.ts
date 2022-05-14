@@ -9,7 +9,7 @@ export default class ErrorMiddleware {
       [ErrorCode.ENTITY_ALREADY_EXISTS]: 409,
       [ErrorCode.ENTITY_NOT_FOUND]: 404,
       [ErrorCode.ENTITY_PROPERTY_INVALID]: 422,
-      [ErrorCode.ENTITY_PROPERTY_MISSING]: 422,
+      [ErrorCode.ENTITY_PROPERTY_MISSING]: 400,
       [ErrorCode.ENTITY_PROPERTY_UNEXPECTED]: 422,
       [ErrorCode.INVALID_QUERY]: 422,
       [ErrorCode.LOGIN_INFO_INVALID]: 401,
