@@ -1,7 +1,6 @@
 import express, { Express, RequestHandler } from 'express';
 import fs from 'fs';
-import TeamModelSequelizeAdapter from './adapters/TeamModelSequelizeAdapter';
-import UserModelSequelizeAdapter from './adapters/UserModelSequelizeAdapter';
+import { TeamModelSequelizeAdapter, UserModelSequelizeAdapter } from './adapters';
 import { LoginController, TeamController } from './controllers';
 import { TeamRepoInterface } from './interfaces/team';
 import { UserRepoInterface } from './interfaces/user';
