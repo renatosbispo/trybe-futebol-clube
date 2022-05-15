@@ -1,9 +1,9 @@
-import { UserModelInterface, UserRepo } from '../interfaces/user';
+import { UserModelInterface, UserRepoInterface } from '../interfaces/user';
 
 export default class UserService {
-  protected userRepo: UserRepo;
+  protected userRepo: UserRepoInterface;
 
-  constructor(userRepo: UserRepo) {
+  constructor(userRepo: UserRepoInterface) {
     this.userRepo = userRepo;
   }
 

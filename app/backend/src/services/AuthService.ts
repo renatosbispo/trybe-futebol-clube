@@ -1,15 +1,15 @@
 import jwt, { SignOptions } from 'jsonwebtoken';
 import CryptoService from './CryptoService';
-import { UserModelInterface, UserRepo } from '../interfaces/user';
+import { UserModelInterface, UserRepoInterface } from '../interfaces/user';
 import TokenPayloadInterface from '../interfaces/auth/TokenPayload.interface';
 import ErrorWithCode from '../lib/error-with-code';
 
 export default class AuthService {
   protected jwtSecret: string;
 
-  protected userRepo: UserRepo;
+  protected userRepo: UserRepoInterface;
 
-  constructor(userRepo: UserRepo, jwtSecret: string) {
+  constructor(userRepo: UserRepoInterface, jwtSecret: string) {
     this.jwtSecret = jwtSecret;
     this.userRepo = userRepo;
   }

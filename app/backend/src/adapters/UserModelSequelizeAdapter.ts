@@ -1,7 +1,7 @@
 import UserModel from '../database/models/UserModel';
-import { UserModelInterface, UserRepo } from '../interfaces/user';
+import { UserModelInterface, UserRepoInterface } from '../interfaces/user';
 
-export default class UserModelSequelizeAdapter implements UserRepo {
+export default class UserModelSequelizeAdapter implements UserRepoInterface {
   protected _UserModel: typeof UserModel;
 
   constructor() {

@@ -3,9 +3,9 @@ import db from '.';
 import MatchModel from './MatchModel';
 
 class TeamModel extends Model {
-  public id!: number;
+  declare id: number;
 
-  public teamName!: string;
+  declare teamName: string;
 }
 
 TeamModel.init(
