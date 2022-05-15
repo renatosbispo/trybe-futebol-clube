@@ -95,7 +95,7 @@ describe('GET /teams', () => {
     expect(response.status).to.be.equal(200);
   });
 
-  it('The response body should an array', () => {
+  it('The response body should be an array', () => {
     expect(response.body).to.be.an('array');
   });
 
