@@ -9,6 +9,7 @@ export default class TeamRouter {
   constructor(teamController: TeamController) {
     this.teamController = teamController;
     this.router = Router();
+    this.router = this.setupGetRoot();
   }
 
   protected setupGetRoot(): Router {
