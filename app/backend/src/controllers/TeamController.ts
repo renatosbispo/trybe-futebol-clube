@@ -22,4 +22,19 @@ export default class TeamController {
       next(error);
     }
   }
+
+  public async findById(
+    req: Request<{ id: string }, TeamModelInterface>,
+    res: Response<TeamModelInterface>,
+    next: NextFunction,
+  ) {
+    try {
+      const { id } = req.params;
+      const team = await this.teamService.findById(id);
+
+      res.status(200).json(team);
+    } catch (error) {
+      next(error);
+    }
+  }
 }
