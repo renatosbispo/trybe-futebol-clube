@@ -9,6 +9,14 @@ export default class MatchModelSequelizeAdapter implements MatchRepoInterface {
     this._MatchModel = MatchModel;
   }
 
+  public async create(
+    data: Omit<MatchModelInterface, 'id'>,
+  ): Promise<MatchModelInterface> {
+    const { id } = await this._MatchModel.create(data);
+
+    return { id, ...data };
+  }
+
   public async findAll(): Promise<MatchModelInterface[]> {
     const matches = await this._MatchModel.findAll({
       include: [
