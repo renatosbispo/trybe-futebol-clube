@@ -13,4 +13,10 @@ export default class TeamModelSequelizeAdapter implements TeamRepoInterface {
 
     return teams;
   }
+
+  public async findById(id: number): Promise<TeamModelInterface | null> {
+    const team = await this._TeamModel.findByPk(id);
+
+    return team;
+  }
 }
