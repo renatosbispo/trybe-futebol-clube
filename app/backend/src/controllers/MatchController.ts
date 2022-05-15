@@ -10,12 +10,19 @@ export default class MatchController {
   }
 
   public async findAll(
-    _req: Request<unknown, MatchModelInterface[]>,
+    req: Request<
+    unknown,
+    MatchModelInterface[],
+    unknown,
+    { inProgress: string | undefined }
+    >,
     res: Response<MatchModelInterface[]>,
     next: NextFunction,
   ): Promise<void> {
     try {
-      const matches = await this.matchService.findAll();
+      const { inProgress } = req.query;
+
+      const matches = await this.matchService.findAll(inProgress);
 
       res.status(200).json(matches);
     } catch (error) {

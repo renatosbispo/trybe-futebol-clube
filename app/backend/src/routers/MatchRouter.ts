@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import { MatchController } from '../controllers';
+import { MatchModelInterface } from '../interfaces/match';
 
 export default class MatchRouter {
   public router: Router;
@@ -15,7 +16,16 @@ export default class MatchRouter {
   protected setupGetRoot(): Router {
     return this.router.get(
       '/',
-      async (req: Request, res: Response, next: NextFunction) => {
+      async (
+        req: Request<
+        unknown,
+        MatchModelInterface[],
+        unknown,
+        { inProgress: string | undefined }
+        >,
+        res: Response,
+        next: NextFunction,
+      ) => {
         this.matchController.findAll(req, res, next);
       },
     );

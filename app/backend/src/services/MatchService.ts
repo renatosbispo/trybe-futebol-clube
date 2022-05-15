@@ -7,8 +7,21 @@ export default class MatchService {
     this.matchRepo = matchRepo;
   }
 
-  public async findAll(): Promise<MatchModelInterface[]> {
+  public async findAll(
+    inProgress: string | undefined,
+  ): Promise<MatchModelInterface[]> {
     const matches = await this.matchRepo.findAll();
+
+    if (typeof inProgress !== 'undefined') {
+      return matches.filter(
+        (match) => {
+          const isMatchInProgress = match.inProgress === 1;
+          const parsedInProgress = inProgress === 'true';
+
+          return isMatchInProgress === parsedInProgress;
+        },
+      );
+    }
 
     return matches;
   }
