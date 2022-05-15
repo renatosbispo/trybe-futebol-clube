@@ -1,12 +1,26 @@
 import express, { Express, RequestHandler } from 'express';
 import fs from 'fs';
-import { TeamModelSequelizeAdapter, UserModelSequelizeAdapter } from './adapters';
-import { LoginController, TeamController } from './controllers';
+import {
+  MatchModelSequelizeAdapter,
+  TeamModelSequelizeAdapter,
+  UserModelSequelizeAdapter,
+} from './adapters';
+import {
+  LoginController,
+  MatchController,
+  TeamController,
+} from './controllers';
+import { MatchRepoInterface } from './interfaces/match';
 import { TeamRepoInterface } from './interfaces/team';
 import { UserRepoInterface } from './interfaces/user';
 import { AuthMiddleware, ErrorMiddleware } from './middlewares';
-import { LoginRouter, TeamRouter } from './routers';
-import { AuthService, TeamService, UserService } from './services';
+import { LoginRouter, MatchRouter, TeamRouter } from './routers';
+import {
+  AuthService,
+  MatchService,
+  TeamService,
+  UserService,
+} from './services';
 
 class App {
   public app: Express;
@@ -20,6 +34,14 @@ class App {
   protected loginController: LoginController;
 
   protected loginRouter: LoginRouter;
+
+  protected matchController: MatchController;
+
+  protected matchRepo: MatchRepoInterface;
+
+  protected matchRouter: MatchRouter;
+
+  protected matchService: MatchService;
 
   protected teamController: TeamController;
 
@@ -72,11 +94,13 @@ class App {
       this.userService,
     );
 
+    this.matchController = new MatchController(this.matchService);
     this.teamController = new TeamController(this.teamService);
   }
 
   protected setupServices(): void {
     this.authService = new AuthService(this.userRepo, this.jwtSecret);
+    this.matchService = new MatchService(this.matchRepo);
     this.teamService = new TeamService(this.teamRepo);
     this.userService = new UserService(this.userRepo);
   }
@@ -86,12 +110,14 @@ class App {
   }
 
   protected setupRepos(): void {
+    this.matchRepo = new MatchModelSequelizeAdapter();
     this.teamRepo = new TeamModelSequelizeAdapter();
     this.userRepo = new UserModelSequelizeAdapter();
   }
 
   protected setupRoutes(): void {
     this.app.use('/login', this.loginRouter.router);
+    this.app.use('/matches', this.matchRouter.router);
     this.app.use('/teams', this.teamRouter.router);
   }
 
@@ -101,6 +127,7 @@ class App {
       this.loginController,
     );
 
+    this.matchRouter = new MatchRouter(this.matchController);
     this.teamRouter = new TeamRouter(this.teamController);
   }
 
