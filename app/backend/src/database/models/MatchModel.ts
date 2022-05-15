@@ -12,7 +12,7 @@ class MatchModel extends Model {
 
   declare awayTeamGoals: number;
 
-  declare inProgress: boolean;
+  declare inProgress: number;
 }
 
 MatchModel.init(
