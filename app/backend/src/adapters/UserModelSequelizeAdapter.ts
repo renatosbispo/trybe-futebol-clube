@@ -11,7 +11,10 @@ export default class UserModelSequelizeAdapter implements UserRepoInterface {
   public async findOne(
     criteria: Partial<UserModelInterface>,
   ): Promise<UserModelInterface | null> {
-    const user = await this._UserModel.findOne({ where: { ...criteria } });
+    const user = await this._UserModel.findOne({
+      where: { ...criteria },
+      raw: true,
+    });
 
     return user;
   }

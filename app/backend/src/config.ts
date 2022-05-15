@@ -13,6 +13,6 @@ export default class Config {
       timezone: 'Z',
     },
     logging: false,
-    query: { raw: true },
+    // query: { raw: true },
   };
 }

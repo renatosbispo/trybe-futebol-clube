@@ -1,4 +1,5 @@
 import LoginRouter from './LoginRouter';
+import MatchRouter from './MatchRouter';
 import TeamRouter from './TeamRouter';
 
-export { LoginRouter, TeamRouter };
+export { LoginRouter, MatchRouter, TeamRouter };
