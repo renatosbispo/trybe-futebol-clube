@@ -1,4 +1,4 @@
 export default interface TeamModelInterface {
   id: number;
-  name: string;
+  teamName: string;
 }
