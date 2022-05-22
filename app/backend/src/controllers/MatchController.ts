@@ -9,6 +9,25 @@ export default class MatchController {
     this.matchService = matchService;
   }
 
+  public async create(
+    req: Request<
+    unknown,
+    MatchModelInterface,
+    Omit<MatchModelInterface, 'id'>
+    >,
+    res: Response<Omit<MatchModelInterface, 'id'>>,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const data = req.body;
+      const matches = await this.matchService.create(data);
+
+      res.status(201).json(matches);
+    } catch (error) {
+      next(error);
+    }
+  }
+
   public async findAll(
     req: Request<
     unknown,

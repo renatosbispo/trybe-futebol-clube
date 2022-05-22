@@ -15,20 +15,20 @@ describe('POST /matches', () => {
   let token: string;
 
   const validMatchFromReq = {
-    homeTeam: 'São Paulo',
+    homeTeam: 16,
+    awayTeam: 8,
     homeTeamGoals: 2,
-    awayTeam: 'Internacional',
-    awayTeamGoals: 0,
+    awayTeamGoals: 2,
     inProgress: true,
   };
 
   const matchFromDb = {
     id: 1,
     homeTeam: 16,
+    awayTeam: 8,
     homeTeamGoals: 2,
-    awayTeam: 9,
-    awayTeamGoals: 0,
-    inProgress: 1,
+    awayTeamGoals: 2,
+    inProgress: true,
   };
 
   before(async () => {

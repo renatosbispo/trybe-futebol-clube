@@ -1,7 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import {
-  AuthenticatedUserInterface,
-} from '../interfaces/user';
+import { AuthenticatedUserInterface } from '../interfaces/user';
 import { UserCredentialsType } from '../types/user';
 import { AuthService } from '../services';
 
@@ -13,11 +11,7 @@ export default class AuthMiddleware {
   }
 
   public async verifyCredentials(
-    req: Request<
-    unknown,
-    AuthenticatedUserInterface,
-    UserCredentialsType
-    >,
+    req: Request<unknown, AuthenticatedUserInterface, UserCredentialsType>,
     _res: Response<AuthenticatedUserInterface>,
     next: NextFunction,
   ): Promise<void> {
@@ -25,6 +19,24 @@ export default class AuthMiddleware {
       const { email, password } = req.body;
 
       await this.authService.verifyCredentials(email, password);
+
+      next();
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  public async verifyToken(
+    req: Request,
+    _res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const token = req.headers.authorization;
+
+      const tokenPayload = this.authService.verifyToken(token);
+
+      req.tokenPayload = tokenPayload;
 
       next();
     } catch (error) {

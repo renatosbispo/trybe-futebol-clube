@@ -17,7 +17,8 @@
     "paths": {
       "*": ["node_modules/*"]
     },
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "typeRoots": ["./src/@types", "./node_modules/@types"]
   },
   "include": ["src/**/*"],
   "exclude": ["src/tests"]

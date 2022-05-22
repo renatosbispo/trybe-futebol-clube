@@ -127,7 +127,7 @@ class App {
       this.loginController,
     );
 
-    this.matchRouter = new MatchRouter(this.matchController);
+    this.matchRouter = new MatchRouter(this.matchController, this.authMiddleware);
     this.teamRouter = new TeamRouter(this.teamController);
   }
 
