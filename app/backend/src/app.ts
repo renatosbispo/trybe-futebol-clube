@@ -100,7 +100,7 @@ class App {
 
   protected setupServices(): void {
     this.authService = new AuthService(this.userRepo, this.jwtSecret);
-    this.matchService = new MatchService(this.matchRepo);
+    this.matchService = new MatchService(this.matchRepo, this.teamRepo);
     this.teamService = new TeamService(this.teamRepo);
     this.userService = new UserService(this.userRepo);
   }
@@ -127,7 +127,7 @@ class App {
       this.loginController,
     );
 
-    this.matchRouter = new MatchRouter(this.matchController);
+    this.matchRouter = new MatchRouter(this.matchController, this.authMiddleware);
     this.teamRouter = new TeamRouter(this.teamController);
   }
 
