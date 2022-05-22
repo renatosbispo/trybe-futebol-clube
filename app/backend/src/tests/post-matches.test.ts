@@ -48,25 +48,27 @@ describe('POST /matches', () => {
     (MatchModel.create as sinon.SinonStub).restore();
   });
 
-  describe('If the request body contains proper match data and the header contains a valid JWT token', () => {
-    beforeEach(async () => {
-      response = await chai
-        .request(app)
-        .post('/matches')
-        .set('Authorization', token)
-        .send(validMatchFromReq);
-    });
+  describe('If the header contains a valid JWT token', () => {
+    describe('If the request body contains proper match data', () => {
+      beforeEach(async () => {
+        response = await chai
+          .request(app)
+          .post('/matches')
+          .set('Authorization', token)
+          .send(validMatchFromReq);
+      });
 
-    it('The response status code should be 201', () => {
-      expect(response.status).to.be.equal(201);
-    });
+      it('The response status code should be 201', () => {
+        expect(response.status).to.be.equal(201);
+      });
 
-    it('The response body should be an object', () => {
-      expect(response.body).to.be.an('object');
-    });
+      it('The response body should be an object', () => {
+        expect(response.body).to.be.an('object');
+      });
 
-    it('The response body should contain the data from the match created', () => {
-      expect(response.body).to.be.deep.equal(matchFromDb);
+      it('The response body should contain the data from the match created', () => {
+        expect(response.body).to.be.deep.equal(matchFromDb);
+      });
     });
   });
 });
