@@ -10,12 +10,16 @@ export default class MatchRouter {
 
   protected matchController: MatchController;
 
-  constructor(matchController: MatchController, authMiddleware: AuthMiddleware) {
+  constructor(
+    matchController: MatchController,
+    authMiddleware: AuthMiddleware,
+  ) {
     this.matchController = matchController;
     this.authMiddleware = authMiddleware;
     this.router = Router();
     this.router = this.setupGetRoot();
     this.router = this.setupPostRoot();
+    this.router = this.setupPatchIdFinish();
   }
 
   protected setupGetRoot(): Router {
@@ -36,14 +40,23 @@ export default class MatchRouter {
     );
   }
 
+  protected setupPatchIdFinish(): Router {
+    return this.router.patch(
+      '/:id/finish',
+      async (req: Request<
+      { id: string },
+      { message: string },
+      Partial<MatchModelInterface>
+      >, res: Response, next: NextFunction) => {
+        this.matchController.finishMatch(req, res, next);
+      },
+    );
+  }
+
   protected setupPostRoot(): Router {
     return this.router.post(
       '/',
-      async (
-        req: Request,
-        res: Response,
-        next: NextFunction,
-      ) => {
+      async (req: Request, res: Response, next: NextFunction) => {
         this.authMiddleware.verifyToken(req, res, next);
       },
       async (

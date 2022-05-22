@@ -53,4 +53,11 @@ export default class MatchService {
 
     return matches;
   }
+
+  public async update(
+    id: string,
+    newData: Partial<MatchModelInterface>,
+  ): Promise<void> {
+    await this.matchRepo.update(Number(id), newData);
+  }
 }
