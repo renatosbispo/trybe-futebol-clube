@@ -15,10 +15,10 @@ export default class MatchService {
     if (typeof inProgress !== 'undefined') {
       return matches.filter(
         (match) => {
-          const isMatchInProgress = match.inProgress === 1;
           const parsedInProgress = inProgress === 'true';
+          const inProgressFromDb = Boolean(match.inProgress);
 
-          return isMatchInProgress === parsedInProgress;
+          return inProgressFromDb === parsedInProgress;
         },
       );
     }
