@@ -44,22 +44,37 @@ describe('PATCH /matches', () => {
       .send({ email: 'user@user.com', password: 'secret_user' });
 
     token = loginResponse.body.token;
+
+    await chai
+      .request(app)
+      .post('/matches')
+      .set('Authorization', token)
+      .send(validMatch);
   });
 
   after(() => {
     (MatchModel.create as sinon.SinonStub).restore();
-
     (MatchModel.update as sinon.SinonStub).restore();
   });
 
-  describe('/matches/:id/finish', () => {
+  describe('/matches/:id with content in request body', () => {
     before(async () => {
       await chai
         .request(app)
         .post('/matches')
         .set('Authorization', token)
-        .send(validMatch);
+        .send({ awayTeamGoals: 4, homeTeamGoals: 5 });
 
+      response = await chai.request(app).patch('/matches/1');
+    });
+
+    it('The response status code should be 200', () => {
+      expect(response.status).to.be.equal(200);
+    });
+  });
+
+  describe('/matches/:id/finish', () => {
+    before(async () => {
       response = await chai.request(app).patch('/matches/1/finish');
     });
 

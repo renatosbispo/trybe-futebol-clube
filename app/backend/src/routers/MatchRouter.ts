@@ -19,6 +19,7 @@ export default class MatchRouter {
     this.router = Router();
     this.router = this.setupGetRoot();
     this.router = this.setupPostRoot();
+    this.router = this.setupPatchId();
     this.router = this.setupPatchIdFinish();
   }
 
@@ -36,6 +37,19 @@ export default class MatchRouter {
         next: NextFunction,
       ) => {
         this.matchController.findAll(req, res, next);
+      },
+    );
+  }
+
+  protected setupPatchId(): Router {
+    return this.router.patch(
+      '/:id',
+      async (req: Request<
+      { id: string },
+      unknown,
+      Partial<MatchModelInterface>
+      >, res: Response, next: NextFunction) => {
+        this.matchController.update(req, res, next);
       },
     );
   }

@@ -68,4 +68,25 @@ export default class MatchController {
       next(error);
     }
   }
+
+  public async update(
+    req: Request<
+    { id: string },
+    unknown,
+    Partial<MatchModelInterface>
+    >,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const { id } = req.params;
+      const { awayTeamGoals, homeTeamGoals } = req.body;
+
+      await this.matchService.update(id, { awayTeamGoals, homeTeamGoals });
+
+      res.status(200).end();
+    } catch (error) {
+      next(error);
+    }
+  }
 }
