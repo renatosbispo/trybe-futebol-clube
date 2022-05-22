@@ -1,11 +1,15 @@
 import ErrorWithCode from '../lib/error-with-code';
 import { MatchModelInterface, MatchRepoInterface } from '../interfaces/match';
+import { TeamRepoInterface } from '../interfaces/team';
 
 export default class MatchService {
   protected matchRepo: MatchRepoInterface;
 
-  constructor(matchRepo: MatchRepoInterface) {
+  protected teamRepo: TeamRepoInterface;
+
+  constructor(matchRepo: MatchRepoInterface, teamRepo: TeamRepoInterface) {
     this.matchRepo = matchRepo;
+    this.teamRepo = teamRepo;
   }
 
   public async create(
@@ -15,6 +19,16 @@ export default class MatchService {
       throw new ErrorWithCode(
         'UNAUTHORIZED_OPERATION',
         'It is not possible to create a match with two equal teams',
+      );
+    }
+
+    const awayTeam = await this.teamRepo.findById(data.awayTeam);
+    const homeTeam = await this.teamRepo.findById(data.homeTeam);
+
+    if (!awayTeam || !homeTeam) {
+      throw new ErrorWithCode(
+        'ENTITY_NOT_FOUND',
+        'There is no team with such id!',
       );
     }
 
