@@ -1,4 +1,3 @@
-import { firstBy } from 'thenby';
 import LeaderboardInterface from '../interfaces/leaderboard/Leaderboard.interface';
 import { MatchRepoInterface } from '../interfaces/match';
 import TeamService from './TeamService';
