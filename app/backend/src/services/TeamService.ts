@@ -35,7 +35,10 @@ export default class TeamService {
   public async findAwayMatches(id: number): Promise<MatchModelInterface[]> {
     const matches = await this.matchRepo.findAll();
 
-    const awayMatches = matches.filter(({ awayTeam }) => awayTeam === id, 0);
+    const awayMatches = matches.filter(
+      ({ awayTeam, inProgress }) => awayTeam === id && !inProgress,
+      0,
+    );
 
     return awayMatches;
   }
@@ -56,7 +59,10 @@ export default class TeamService {
   public async findHomeMatches(id: number): Promise<MatchModelInterface[]> {
     const matches = await this.matchRepo.findAll();
 
-    const homeMatches = matches.filter(({ homeTeam }) => homeTeam === id, 0);
+    const homeMatches = matches.filter(
+      ({ homeTeam, inProgress }) => homeTeam === id && !inProgress,
+      0,
+    );
 
     return homeMatches;
   }

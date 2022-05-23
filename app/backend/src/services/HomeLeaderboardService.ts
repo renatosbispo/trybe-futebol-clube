@@ -68,7 +68,8 @@ export default class HomeLeaderboardService {
 
   protected async sortHomeLeaderboard() {
     this.homeLeaderboard.sort((a, b) => (
-      b.totalVictories - a.totalVictories
+      b.totalPoints - a.totalPoints
+      || b.totalVictories - a.totalVictories
       || b.goalsBalance - a.goalsBalance
       || b.goalsFavor - a.goalsFavor
       || a.goalsOwn - b.goalsOwn
