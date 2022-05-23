@@ -12,5 +12,12 @@ export default class LeaderboardService {
     this.teamService = teamService;
   }
 
+  public async getTotalHomePoints(id: number): Promise<number> {
+    const totalHomeDraws = await this.teamService.getHomeDraws(id);
+    const totalHomeVictories = await this.teamService.getHomeVictories(id);
+
+    return totalHomeDraws + totalHomeVictories * 3;
+  }
+
   // getHomeLeaderboard(): Promise<LeaderboardInterface> {}
 }
