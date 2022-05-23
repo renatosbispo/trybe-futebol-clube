@@ -35,6 +35,16 @@ export default class LeaderboardService {
     return totalHomeDraws + totalHomeVictories * 3;
   }
 
+  public async getLeaderboardHome(): Promise<LeaderboardInterface[]> {
+    const teams = await this.teamService.findAll();
+
+    const leaderboard = await Promise.all(
+      teams.map(({ id }) => this.getTeamStatsHome(id)),
+    );
+
+    return leaderboard;
+  }
+
   public async getTeamStatsHome(id: number): Promise<LeaderboardInterface> {
     return {
       name: (await this.teamService.findById(`${id}`)).teamName,
@@ -49,6 +59,4 @@ export default class LeaderboardService {
       efficiency: await this.getHomeEfficiency(id),
     };
   }
-
-  // getHomeLeaderboard(): Promise<LeaderboardInterface> {}
 }
