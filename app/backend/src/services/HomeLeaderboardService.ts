@@ -68,23 +68,11 @@ export default class HomeLeaderboardService {
   }
 
   protected async sortHomeLeaderboard() {
-    this.homeLeaderboard.sort(
-      firstBy(
-        (a: LeaderboardInterface, b: LeaderboardInterface) =>
-          b.totalVictories - a.totalVictories,
-      )
-        .thenBy(
-          (a: LeaderboardInterface, b: LeaderboardInterface) =>
-            b.goalsBalance - a.goalsBalance,
-        )
-        .thenBy(
-          (a: LeaderboardInterface, b: LeaderboardInterface) =>
-            b.goalsFavor - a.goalsFavor,
-        )
-        .thenBy(
-          (a: LeaderboardInterface, b: LeaderboardInterface) =>
-            a.goalsOwn - b.goalsOwn,
-        ),
-    );
+    this.homeLeaderboard.sort((a, b) => (
+      b.totalVictories - a.totalVictories
+      || b.goalsBalance - a.goalsBalance
+      || b.goalsFavor - a.goalsFavor
+      || a.goalsOwn - b.goalsOwn
+    ));
   }
 }
