@@ -12,6 +12,20 @@ export default class TeamService {
     this.teamRepo = teamRepo;
   }
 
+  public async countAwayGamesWhere(
+    id: number,
+    predicate: (match: MatchModelInterface) => boolean,
+  ): Promise<number> {
+    const matches = await this.findAwayMatches(id);
+
+    const totalAwayMatches = matches.reduce(
+      (total, match) => (predicate(match) ? total + 1 : total),
+      0,
+    );
+
+    return totalAwayMatches;
+  }
+
   public async countHomeGamesWhere(
     id: number,
     predicate: (match: MatchModelInterface) => boolean,
@@ -87,6 +101,33 @@ export default class TeamService {
     );
 
     return awayGoalsAgainst;
+  }
+
+  public async getAwayTotalDraws(id: number): Promise<number> {
+    return this.countAwayGamesWhere(
+      id,
+      ({ homeTeamGoals, awayTeamGoals }) => homeTeamGoals === awayTeamGoals,
+    );
+  }
+
+  public async getAwayTotalLosses(id: number): Promise<number> {
+    return this.countAwayGamesWhere(
+      id,
+      ({ homeTeamGoals, awayTeamGoals }) => homeTeamGoals > awayTeamGoals,
+    );
+  }
+
+  public async getAwayTotalMatches(id: number): Promise<number> {
+    const awayMatches = (await this.findAwayMatches(id)).length;
+
+    return awayMatches;
+  }
+
+  public async getAwayTotalVictories(id: number): Promise<number> {
+    return this.countAwayGamesWhere(
+      id,
+      ({ homeTeamGoals, awayTeamGoals }) => homeTeamGoals < awayTeamGoals,
+    );
   }
 
   public async getGoalsAgainst(id: number): Promise<number> {

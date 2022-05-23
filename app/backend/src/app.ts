@@ -18,6 +18,7 @@ import { AuthMiddleware, ErrorMiddleware } from './middlewares';
 import { LeaderboardRouter, LoginRouter, MatchRouter, TeamRouter } from './routers';
 import {
   AuthService,
+  AwayLeaderboardService,
   HomeLeaderboardService,
   MatchService,
   TeamService,
@@ -30,6 +31,8 @@ class App {
   protected authMiddleware: AuthMiddleware;
 
   protected authService: AuthService;
+
+  protected awayLeaderboardService: AwayLeaderboardService;
 
   protected homeLeaderboardService: HomeLeaderboardService;
 
@@ -97,7 +100,10 @@ class App {
   }
 
   protected setupControllers(): void {
-    this.leaderboardController = new LeaderboardController(this.homeLeaderboardService);
+    this.leaderboardController = new LeaderboardController(
+      this.homeLeaderboardService,
+      this.awayLeaderboardService,
+    );
 
     this.loginController = new LoginController(
       this.authService,
@@ -112,6 +118,11 @@ class App {
     this.authService = new AuthService(this.userRepo, this.jwtSecret);
     this.matchService = new MatchService(this.matchRepo, this.teamRepo);
     this.teamService = new TeamService(this.teamRepo, this.matchRepo);
+
+    this.awayLeaderboardService = new AwayLeaderboardService(
+      this.matchRepo,
+      this.teamService,
+    );
 
     this.homeLeaderboardService = new HomeLeaderboardService(
       this.matchRepo,

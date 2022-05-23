@@ -9,7 +9,17 @@ export default class LeaderboardRouter {
   constructor(leaderboardController: LeaderboardController) {
     this.leaderboardController = leaderboardController;
     this.router = Router();
+    this.setupGetAway();
     this.setupGetHome();
+  }
+
+  protected setupGetAway() {
+    return this.router.get(
+      '/away',
+      async (req: Request, res: Response, next: NextFunction) => {
+        this.leaderboardController.getAwayLeaderboard(req, res, next);
+      },
+    );
   }
 
   protected setupGetHome() {
