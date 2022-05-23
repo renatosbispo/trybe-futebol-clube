@@ -3,7 +3,7 @@ import LeaderboardInterface from '../interfaces/leaderboard/Leaderboard.interfac
 import { MatchRepoInterface } from '../interfaces/match';
 import TeamService from './TeamService';
 
-export default class LeaderboardService {
+export default class HomeLeaderboardService {
   protected homeLeaderboard: LeaderboardInterface[];
 
   protected matchRepo: MatchRepoInterface;
@@ -15,7 +15,7 @@ export default class LeaderboardService {
     this.teamService = teamService;
   }
 
-  public async getHomeEfficiency(id: number): Promise<number> {
+  protected async getHomeEfficiency(id: number): Promise<number> {
     const homeTotalPoints = await this.getHomeTotalPoints(id);
     const homeTotalMatches = await this.teamService.getHomeTotalMatches(id);
 
@@ -24,14 +24,14 @@ export default class LeaderboardService {
     return Math.round(homeEfficiency * 100) / 100;
   }
 
-  public async getHomeGoalsBalance(id: number): Promise<number> {
+  protected async getHomeGoalsBalance(id: number): Promise<number> {
     const homeGoalsFor = await this.teamService.getHomeGoalsFor(id);
     const homeGoalsAgainst = await this.teamService.getHomeGoalsAgainst(id);
 
     return homeGoalsFor - homeGoalsAgainst;
   }
 
-  public async getHomeTotalPoints(id: number): Promise<number> {
+  protected async getHomeTotalPoints(id: number): Promise<number> {
     const totalHomeDraws = await this.teamService.getHomeTotalDraws(id);
     const totalHomeVictories = await this.teamService.getHomeTotalVictories(id);
 
@@ -52,7 +52,7 @@ export default class LeaderboardService {
     return this.homeLeaderboard;
   }
 
-  public async getTeamStatsHome(id: number): Promise<LeaderboardInterface> {
+  protected async getTeamStatsHome(id: number): Promise<LeaderboardInterface> {
     return {
       name: (await this.teamService.findById(`${id}`)).teamName,
       totalPoints: await this.getHomeTotalPoints(id),
@@ -67,7 +67,7 @@ export default class LeaderboardService {
     };
   }
 
-  public async sortHomeLeaderboard() {
+  protected async sortHomeLeaderboard() {
     this.homeLeaderboard.sort(
       firstBy(
         (a: LeaderboardInterface, b: LeaderboardInterface) =>
