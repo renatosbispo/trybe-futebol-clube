@@ -31,13 +31,23 @@ export default class TeamService {
     return team;
   }
 
-  public async findGames(id: number): Promise<MatchModelInterface[]> {
+  public async findAwayGames(id: number): Promise<MatchModelInterface[]> {
     const matches = await this.matchRepo.findAll();
 
-    const totalGames = matches.filter(({ homeTeam, awayTeam }) => (
-      awayTeam === id || homeTeam === id
+    const awayGames = matches.filter(({ awayTeam }) => (
+      awayTeam === id
     ), 0);
 
-    return totalGames;
+    return awayGames;
+  }
+
+  public async findHomeGames(id: number): Promise<MatchModelInterface[]> {
+    const matches = await this.matchRepo.findAll();
+
+    const homeGames = matches.filter(({ homeTeam }) => (
+      homeTeam === id
+    ), 0);
+
+    return homeGames;
   }
 }
