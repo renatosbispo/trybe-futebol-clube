@@ -1,5 +1,6 @@
+import LeaderboardController from './LeaderboardController';
 import LoginController from './LoginController';
 import MatchController from './MatchController';
 import TeamController from './TeamController';
 
-export { LoginController, MatchController, TeamController };
+export { LeaderboardController, LoginController, MatchController, TeamController };

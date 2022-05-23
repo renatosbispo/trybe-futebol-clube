@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response, Router } from 'express';
-import LeaderboardController from '../controllers/LeaderboardController';
+import { LeaderboardController } from '../controllers';
 
 export default class LeaderboardRouter {
   protected leaderboardController: LeaderboardController;
