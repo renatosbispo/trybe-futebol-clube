@@ -84,7 +84,7 @@ export default class MatchController {
 
       await this.matchService.update(id, { awayTeamGoals, homeTeamGoals });
 
-      res.status(200).send();
+      res.status(200).json({ message: 'Updated' });
     } catch (error) {
       next(error);
     }
