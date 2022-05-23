@@ -10,12 +10,17 @@ export default class MatchRouter {
 
   protected matchController: MatchController;
 
-  constructor(matchController: MatchController, authMiddleware: AuthMiddleware) {
+  constructor(
+    matchController: MatchController,
+    authMiddleware: AuthMiddleware,
+  ) {
     this.matchController = matchController;
     this.authMiddleware = authMiddleware;
     this.router = Router();
     this.router = this.setupGetRoot();
     this.router = this.setupPostRoot();
+    this.router = this.setupPatchId();
+    this.router = this.setupPatchIdFinish();
   }
 
   protected setupGetRoot(): Router {
@@ -36,14 +41,36 @@ export default class MatchRouter {
     );
   }
 
+  protected setupPatchId(): Router {
+    return this.router.patch(
+      '/:id',
+      async (req: Request<
+      { id: string },
+      unknown,
+      Partial<MatchModelInterface>
+      >, res: Response, next: NextFunction) => {
+        this.matchController.update(req, res, next);
+      },
+    );
+  }
+
+  protected setupPatchIdFinish(): Router {
+    return this.router.patch(
+      '/:id/finish',
+      async (req: Request<
+      { id: string },
+      { message: string },
+      Partial<MatchModelInterface>
+      >, res: Response, next: NextFunction) => {
+        this.matchController.finishMatch(req, res, next);
+      },
+    );
+  }
+
   protected setupPostRoot(): Router {
     return this.router.post(
       '/',
-      async (
-        req: Request,
-        res: Response,
-        next: NextFunction,
-      ) => {
+      async (req: Request, res: Response, next: NextFunction) => {
         this.authMiddleware.verifyToken(req, res, next);
       },
       async (

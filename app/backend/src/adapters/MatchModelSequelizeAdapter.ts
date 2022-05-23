@@ -27,4 +27,11 @@ export default class MatchModelSequelizeAdapter implements MatchRepoInterface {
 
     return matches;
   }
+
+  public async update(
+    id: number,
+    newData: Partial<MatchModelInterface>,
+  ): Promise<void> {
+    await this._MatchModel.update({ ...newData }, { where: { id } });
+  }
 }
