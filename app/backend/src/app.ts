@@ -6,6 +6,7 @@ import {
   UserModelSequelizeAdapter,
 } from './adapters';
 import {
+  LeaderboardController,
   LoginController,
   MatchController,
   TeamController,
@@ -14,9 +15,10 @@ import { MatchRepoInterface } from './interfaces/match';
 import { TeamRepoInterface } from './interfaces/team';
 import { UserRepoInterface } from './interfaces/user';
 import { AuthMiddleware, ErrorMiddleware } from './middlewares';
-import { LoginRouter, MatchRouter, TeamRouter } from './routers';
+import { LeaderboardRouter, LoginRouter, MatchRouter, TeamRouter } from './routers';
 import {
   AuthService,
+  HomeLeaderboardService,
   MatchService,
   TeamService,
   UserService,
@@ -29,7 +31,13 @@ class App {
 
   protected authService: AuthService;
 
+  protected homeLeaderboardService: HomeLeaderboardService;
+
   protected jwtSecret: string;
+
+  protected leaderboardController: LeaderboardController;
+
+  protected leaderboardRouter: LeaderboardRouter;
 
   protected loginController: LoginController;
 
@@ -89,6 +97,8 @@ class App {
   }
 
   protected setupControllers(): void {
+    this.leaderboardController = new LeaderboardController(this.homeLeaderboardService);
+
     this.loginController = new LoginController(
       this.authService,
       this.userService,
@@ -101,7 +111,13 @@ class App {
   protected setupServices(): void {
     this.authService = new AuthService(this.userRepo, this.jwtSecret);
     this.matchService = new MatchService(this.matchRepo, this.teamRepo);
-    this.teamService = new TeamService(this.teamRepo);
+    this.teamService = new TeamService(this.teamRepo, this.matchRepo);
+
+    this.homeLeaderboardService = new HomeLeaderboardService(
+      this.matchRepo,
+      this.teamService,
+    );
+
     this.userService = new UserService(this.userRepo);
   }
 
@@ -116,12 +132,15 @@ class App {
   }
 
   protected setupRoutes(): void {
+    this.app.use('/leaderboard', this.leaderboardRouter.router);
     this.app.use('/login', this.loginRouter.router);
     this.app.use('/matches', this.matchRouter.router);
     this.app.use('/teams', this.teamRouter.router);
   }
 
   protected setupRouters(): void {
+    this.leaderboardRouter = new LeaderboardRouter(this.leaderboardController);
+
     this.loginRouter = new LoginRouter(
       this.authMiddleware,
       this.loginController,
