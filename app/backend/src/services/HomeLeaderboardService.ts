@@ -41,7 +41,7 @@ export default class HomeLeaderboardService {
     const teams = await this.teamService.findAll();
 
     const leaderboard = await Promise.all(
-      teams.map(({ id }) => this.getTeamStatsHome(id)),
+      teams.map(({ id, teamName }) => this.getTeamStatsHome(id, teamName)),
     );
 
     this.homeLeaderboard = leaderboard;
@@ -51,9 +51,9 @@ export default class HomeLeaderboardService {
     return this.homeLeaderboard;
   }
 
-  protected async getTeamStatsHome(id: number): Promise<LeaderboardInterface> {
+  protected async getTeamStatsHome(id: number, name: string): Promise<LeaderboardInterface> {
     return {
-      name: (await this.teamService.findById(`${id}`)).teamName,
+      name,
       totalPoints: await this.getHomeTotalPoints(id),
       totalGames: await this.teamService.getHomeTotalMatches(id),
       totalVictories: await this.teamService.getHomeTotalVictories(id),
