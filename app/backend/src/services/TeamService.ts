@@ -14,13 +14,13 @@ export default class TeamService {
 
   public async countHomeGamesWhere(
     id: number,
-    predicate: (match: MatchModelInterface) => boolean
+    predicate: (match: MatchModelInterface) => boolean,
   ): Promise<number> {
     const matches = await this.findHomeMatches(id);
 
     const totalHomeMatches = matches.reduce(
       (total, match) => (predicate(match) ? total + 1 : total),
-      0
+      0,
     );
 
     return totalHomeMatches;
@@ -46,7 +46,7 @@ export default class TeamService {
     if (!team) {
       throw new ErrorWithCode(
         'ENTITY_NOT_FOUND',
-        `Team with id ${id} not found`
+        `Team with id ${id} not found`,
       );
     }
 
@@ -62,7 +62,7 @@ export default class TeamService {
   }
 
   public async getAwayGoalsFor(id: number): Promise<number> {
-    const awayMatches = await this.findHomeMatches(id);
+    const awayMatches = await this.findAwayMatches(id);
 
     const awayGoalsFor = awayMatches.reduce(
       (total, { awayTeamGoals }) => total + awayTeamGoals,
@@ -72,11 +72,40 @@ export default class TeamService {
     return awayGoalsFor;
   }
 
+  public async getAwayGoalsAgainst(id: number): Promise<number> {
+    const awayMatches = await this.findAwayMatches(id);
+
+    const awayGoalsAgainst = awayMatches.reduce(
+      (total, { homeTeamGoals }) => total + homeTeamGoals,
+      0,
+    );
+
+    return awayGoalsAgainst;
+  }
+
+  public async getGoalsAgainst(id: number): Promise<number> {
+    const awayGoalsAgainst = await this.getAwayGoalsAgainst(id);
+    const homeGoalsAgainst = await this.getHomeGoalsAgainst(id);
+
+    return awayGoalsAgainst + homeGoalsAgainst;
+  }
+
   public async getGoalsFor(id: number): Promise<number> {
     const awayGoalsFor = await this.getAwayGoalsFor(id);
     const homeGoalsFor = await this.getHomeGoalsFor(id);
 
     return awayGoalsFor + homeGoalsFor;
+  }
+
+  public async getHomeGoalsAgainst(id: number): Promise<number> {
+    const homeMatches = await this.findHomeMatches(id);
+
+    const homeGoalsAgainst = homeMatches.reduce(
+      (total, { awayTeamGoals }) => total + awayTeamGoals,
+      0,
+    );
+
+    return homeGoalsAgainst;
   }
 
   public async getHomeGoalsFor(id: number): Promise<number> {
