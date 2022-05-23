@@ -12,6 +12,20 @@ export default class TeamService {
     this.teamRepo = teamRepo;
   }
 
+  public async countHomeGamesWhere(
+    id: number,
+    predicate: (match: MatchModelInterface) => boolean,
+  ): Promise<number> {
+    const matches = await this.findHomeMatches(id);
+
+    const totalHomeMatches = matches.reduce(
+      (total, match) => (predicate(match) ? total + 1 : total),
+      0,
+    );
+
+    return totalHomeMatches;
+  }
+
   public async findAll(): Promise<TeamModelInterface[]> {
     const teams = await this.teamRepo.findAll();
 
@@ -31,23 +45,32 @@ export default class TeamService {
     return team;
   }
 
-  public async findAwayGames(id: number): Promise<MatchModelInterface[]> {
+  public async findHomeMatches(id: number): Promise<MatchModelInterface[]> {
     const matches = await this.matchRepo.findAll();
 
-    const awayGames = matches.filter(({ awayTeam }) => (
-      awayTeam === id
-    ), 0);
+    const homeMatches = matches.filter(({ homeTeam }) => homeTeam === id, 0);
 
-    return awayGames;
+    return homeMatches;
   }
 
-  public async findHomeGames(id: number): Promise<MatchModelInterface[]> {
-    const matches = await this.matchRepo.findAll();
+  public async getHomeDraws(id: number): Promise<number> {
+    return this.countHomeGamesWhere(
+      id,
+      ({ homeTeamGoals, awayTeamGoals }) => homeTeamGoals === awayTeamGoals,
+    );
+  }
 
-    const homeGames = matches.filter(({ homeTeam }) => (
-      homeTeam === id
-    ), 0);
+  public async getHomeLosses(id: number): Promise<number> {
+    return this.countHomeGamesWhere(
+      id,
+      ({ homeTeamGoals, awayTeamGoals }) => homeTeamGoals < awayTeamGoals,
+    );
+  }
 
-    return homeGames;
+  public async getHomeVictories(id: number): Promise<number> {
+    return this.countHomeGamesWhere(
+      id,
+      ({ homeTeamGoals, awayTeamGoals }) => homeTeamGoals > awayTeamGoals,
+    );
   }
 }
