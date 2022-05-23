@@ -19,7 +19,7 @@ export default class LeaderboardService {
     return homeGoalsFor - homeGoalsAgainst;
   }
 
-  public async getTotalHomePoints(id: number): Promise<number> {
+  public async getHomeTotalPoints(id: number): Promise<number> {
     const totalHomeDraws = await this.teamService.getHomeDraws(id);
     const totalHomeVictories = await this.teamService.getHomeVictories(id);
 
