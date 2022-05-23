@@ -119,24 +119,30 @@ export default class TeamService {
     return homeGoalsFor;
   }
 
-  public async getHomeDraws(id: number): Promise<number> {
+  public async getHomeTotalDraws(id: number): Promise<number> {
     return this.countHomeGamesWhere(
       id,
-      ({ homeTeamGoals, awayTeamGoals }) => homeTeamGoals === awayTeamGoals
+      ({ homeTeamGoals, awayTeamGoals }) => homeTeamGoals === awayTeamGoals,
     );
   }
 
-  public async getHomeLosses(id: number): Promise<number> {
+  public async getHomeTotalLosses(id: number): Promise<number> {
     return this.countHomeGamesWhere(
       id,
-      ({ homeTeamGoals, awayTeamGoals }) => homeTeamGoals < awayTeamGoals
+      ({ homeTeamGoals, awayTeamGoals }) => homeTeamGoals < awayTeamGoals,
     );
   }
 
-  public async getHomeVictories(id: number): Promise<number> {
+  public async getHomeTotalMatches(id: number): Promise<number> {
+    const homeMatches = (await this.findHomeMatches(id)).length;
+
+    return homeMatches;
+  }
+
+  public async getHomeTotalVictories(id: number): Promise<number> {
     return this.countHomeGamesWhere(
       id,
-      ({ homeTeamGoals, awayTeamGoals }) => homeTeamGoals > awayTeamGoals
+      ({ homeTeamGoals, awayTeamGoals }) => homeTeamGoals > awayTeamGoals,
     );
   }
 }
