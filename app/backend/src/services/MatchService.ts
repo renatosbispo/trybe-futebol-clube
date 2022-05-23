@@ -58,6 +58,12 @@ export default class MatchService {
     id: string,
     newData: Partial<MatchModelInterface>,
   ): Promise<void> {
-    await this.matchRepo.update(Number(id), newData);
+    const parsedId = Number(id);
+
+    if (newData.awayTeamGoals || newData.homeTeamGoals) {
+      await this.matchRepo.update(parsedId, newData);
+    } else {
+      await this.matchRepo.update(parsedId, { inProgress: false });
+    }
   }
 }

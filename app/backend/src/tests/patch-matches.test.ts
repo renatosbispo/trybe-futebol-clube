@@ -31,6 +31,12 @@ describe('PATCH /matches', () => {
     inProgress: true,
   };
 
+  const updatedMatch = {
+    ...validMatch,
+    homeTeamGoals: 4,
+    awayTeamGoals: 5,
+  };
+
   before(async () => {
     sinon
       .stub(MatchModel, 'create')
@@ -59,12 +65,16 @@ describe('PATCH /matches', () => {
 
   describe('/matches/:id with content in request body', () => {
     before(async () => {
-      await chai
-        .request(app)
-        .post('/matches')
-        .set('Authorization', token)
-        .send({ awayTeamGoals: 4, homeTeamGoals: 5 });
+      response = await chai.request(app).patch('/matches/1').send(updatedMatch);
+    });
 
+    it('The response status code should be 200', () => {
+      expect(response.status).to.be.equal(200);
+    });
+  });
+
+  describe('/matches/:id without content in request body', () => {
+    before(async () => {
       response = await chai.request(app).patch('/matches/1');
     });
 
