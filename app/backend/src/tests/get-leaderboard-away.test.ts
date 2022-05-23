@@ -202,7 +202,7 @@ describe('GET /leaderboard/away', () => {
       totalDraws: 0,
       totalLosses: 3,
       goalsFavor: 1,
-      goalsOwn: '10',
+      goalsOwn: 10,
       goalsBalance: -9,
       efficiency: 0,
     },
